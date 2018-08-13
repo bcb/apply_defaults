@@ -14,14 +14,14 @@ def apply_self(function: Callable):
     return wrapper
 
 
-def apply_config(config):
+def apply_config(config, section="general"):
     def real_decorator(function: Callable):
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any):
             signature = inspect.signature(function)
             for arg in signature.parameters:
-                if config.has_option("general", arg) and arg not in kwargs:
-                    kwargs[arg] = config.get("general", arg)
+                if config.has_option(section, arg) and arg not in kwargs:
+                    kwargs[arg] = config.get(section, arg)
             return function(*args, **kwargs)
         return wrapper
     return real_decorator
