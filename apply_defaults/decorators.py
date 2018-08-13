@@ -1,13 +1,12 @@
-import inspect
+from inspect import signature
 from functools import wraps
 from typing import Any, Callable
 
 
-def apply_self(function: Callable):
+def apply_self(function: Callable) -> Callable:
     @wraps(function)
-    def wrapper(self, *args: Any, **kwargs: Any):
-        signature = inspect.signature(function)
-        for arg in signature.parameters:
+    def wrapper(self, *args: Any, **kwargs: Any) -> Any:
+        for arg in signature(function).parameters:
             if hasattr(self, arg) and arg not in kwargs:
                 kwargs[arg] = getattr(self, arg)
         return function(self, *args, **kwargs)
@@ -15,14 +14,21 @@ def apply_self(function: Callable):
     return wrapper
 
 
-def apply_config(config, section="general"):
-    def real_decorator(function: Callable):
+def apply_config(config, section="general") -> Callable:
+    def real_decorator(function: Callable) -> Callable:
         @wraps(function)
-        def wrapper(*args: Any, **kwargs: Any):
-            signature = inspect.signature(function)
-            for arg in signature.parameters:
-                if config.has_option(section, arg) and arg not in kwargs:
-                    kwargs[arg] = config.get(section, arg)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            for name, param  in signature(function).parameters.items():
+                if config.has_option(section, name) and name not in kwargs:
+                    # Try to infer the type from the parameter's annotation
+                    if param.annotation is int:
+                        kwargs[name] = config.getint(section, name)
+                    elif param.annotation is float:
+                        kwargs[name] = config.getfloat(section, name)
+                    elif param.annotation is bool:
+                        kwargs[name] = config.getboolean(section, name)
+                    else:
+                        kwargs[name] = config.get(section, name)
             return function(*args, **kwargs)
 
         return wrapper
