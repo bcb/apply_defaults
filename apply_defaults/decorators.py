@@ -17,11 +17,11 @@ def apply_self(function: Callable):
 def apply_config(config):
     def real_decorator(function: Callable):
         @wraps(function)
-        def wrapper(self, *args: Any, **kwargs: Any):
+        def wrapper(*args: Any, **kwargs: Any):
             signature = inspect.signature(function)
             for arg in signature.parameters:
                 if config.has_option("general", arg) and arg not in kwargs:
                     kwargs[arg] = config.get("general", arg)
-            return function(self, *args, **kwargs)
+            return function(*args, **kwargs)
         return wrapper
     return real_decorator
