@@ -20,6 +20,12 @@ class Dummy:
         return foo
 
 
+@apply_config(config)
+def dummy_func(foo=None):
+    return foo
+
+
+
 def test_apply_self():
     assert Dummy().apply_self() is sentinel
 
@@ -34,3 +40,7 @@ def test_apply_config():
 
 def test_apply_config_override():
     assert Dummy().apply_config(foo="bar") is "bar"
+
+
+def test_apply_config_to_function():
+    assert dummy_func(foo="bar") is "bar"
