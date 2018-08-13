@@ -18,7 +18,7 @@ def apply_config(config, section="general") -> Callable:
     def real_decorator(function: Callable) -> Callable:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            for name, param  in signature(function).parameters.items():
+            for name, param in signature(function).parameters.items():
                 if config.has_option(section, name) and name not in kwargs:
                     # Try to infer the type from the parameter's annotation
                     if param.annotation is int:
