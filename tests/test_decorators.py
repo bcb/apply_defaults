@@ -12,11 +12,14 @@ class ApplySelf:
         return foo
 
 
+config = ConfigParser()
+config.read_dict({'general': {'foo': 'bar'}})
+
 class ApplyConfig:
     def __init__(self):
         self.foo = sentinel
 
-    @apply_config(ConfigParser())
+    @apply_config(config)
     def meth(self, foo=None):
         return foo
 
@@ -28,4 +31,4 @@ def test_apply_self_override():
     assert ApplySelf().meth(foo="foo") == "foo"
 
 def test_apply_config():
-    assert ApplyConfig().meth() is sentinel
+    assert ApplyConfig().meth() is 'bar'
