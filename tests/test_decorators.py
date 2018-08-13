@@ -3,35 +3,34 @@ from unittest.mock import sentinel
 from configparser import ConfigParser
 
 
-class ApplySelf:
+config = ConfigParser()
+config.read_dict({"general": {"foo": "foo"}})
+
+
+class Dummy:
     def __init__(self):
         self.foo = sentinel
 
     @apply_self
-    def meth(self, foo=None):
+    def apply_self(self, foo=None):
         return foo
 
-
-config = ConfigParser()
-config.read_dict({'general': {'foo': 'foo'}})
-
-class ApplyConfig:
-    def __init__(self):
-        self.foo = sentinel
-
     @apply_config(config)
-    def meth(self, foo=None):
+    def apply_config(self, foo=None):
         return foo
 
 
 def test_apply_self():
-    assert ApplySelf().meth() is sentinel
+    assert Dummy().apply_self() is sentinel
+
 
 def test_apply_self_override():
-    assert ApplySelf().meth(foo="foo") is "foo"
+    assert Dummy().apply_self(foo="foo") is "foo"
+
 
 def test_apply_config():
-    assert ApplyConfig().meth() is 'foo'
+    assert Dummy().apply_config() is "foo"
+
 
 def test_apply_config_override():
-    assert ApplyConfig().meth(foo="bar") is 'bar'
+    assert Dummy().apply_config(foo="bar") is "bar"

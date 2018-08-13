@@ -11,6 +11,7 @@ def apply_self(function: Callable):
             if hasattr(self, arg) and arg not in kwargs:
                 kwargs[arg] = getattr(self, arg)
         return function(self, *args, **kwargs)
+
     return wrapper
 
 
@@ -23,5 +24,7 @@ def apply_config(config, section="general"):
                 if config.has_option(section, arg) and arg not in kwargs:
                     kwargs[arg] = config.get(section, arg)
             return function(*args, **kwargs)
+
         return wrapper
+
     return real_decorator
