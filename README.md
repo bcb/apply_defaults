@@ -30,7 +30,7 @@ class MyObject:
     def method(self, foo=None):
         return foo
 
->>> # A value is passed - this takes precedence.
+>>> # A value is passed - take this value.
 >>> MyObject().method(foo="bar")
 'bar'
 >>> # A value is not passed, so self.foo is used.
@@ -51,16 +51,26 @@ config = ConfigParser()
 @apply_config(config)
 def my_func(foo=None)
     return foo
+```
 
->>> # A value is passed - this takes precedence.
+When a value is passed, take this value.
+
+```python
 >>> my_func(foo="bar")
 'bar'
->>> # There is no configuration yet; so my_func takes the parameter's
->>> # default value.
+```
+
+There is no configuration yet, so my_func takes the parameter's default value.
+
+```python
 >>> my_func()
 None
->>> # Let's load some configuration. Now when foo is not passed, the param
->>> # takes the value from the configuration.
+```
+
+With some configuration loaded, the param takes the value from the
+configuration.
+
+```python
 >>> config.read_dict({"general": {"foo": "foo"}})
 >>> my_func()
 'foo'
