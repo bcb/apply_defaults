@@ -3,18 +3,21 @@
 Applies a set of values to a function's optional parameters, if nothing was
 passed to them.
 
-In a typical function, the passed value takes precedence, and if no value is
-passed it takes the default value specified in the parameter list is used.
+In Python, a function receives:
+1. the passed value, if specified, otherwise
+2. the default value in the parameter list.
 
-This adds another layer between those two. So the precedence becomes:
+These decorators add another layer in between, so it receives:
 
-1. Passed values, otherwise
-2. The values specified by the decorator, otherwise
-3. The default value.
+1. the passed value, if specified, otherwise
+2. *the value from another set*, if specified, otherwise
+3. the default value in the parameter list.
 
-The values can come from the bound object, or a configuration file.
+The values can come from the bound object or a configuration object.
 
-`apply_self` applies attributes from the bound object ("self"):
+## apply_self
+
+This decorator applies values from the bound object:
 
 ```python
 from apply_defaults import apply_self
@@ -27,15 +30,17 @@ class MyObject:
     def method(self, foo=None):
         return foo
 
->>> # If 'foo' is not passed, the param is assigned the value of self.foo.
->>> MyObject().method()
-'foo'
->>> # Overriding @apply_self by specifying a value for 'foo'.
+>>> # A value is passed - this takes precedence.
 >>> MyObject().method(foo="bar")
 'bar'
+>>> # A value is not passed, so self.foo is used.
+>>> MyObject().method()
+'foo'
 ```
 
-`apply_config` applies the options from a ConfigParser:
+## apply_config
+
+This decorator applies the options from a ConfigParser object:
 
 ```python
 from apply_defaults import apply_config
@@ -47,16 +52,16 @@ config = ConfigParser()
 def my_func(foo=None)
     return foo
 
->>> # There is no configuration yet, so my_func returns the optional
->>> # parameter's default value.
->>> my_func()
-None
->>> config.read_dict({"general": {"foo": "foo"}})
->>> # If 'foo' is not passed, the param is assigned the value of 'foo' in the
->>> # configuration.
->>> my_func()
-'foo'
->>> # Override @apply_config by specifying a value for 'foo'.
+>>> # A value is passed - this takes precedence.
 >>> my_func(foo="bar")
 'bar'
+>>> # There is no configuration yet; so my_func takes the parameter's
+>>> # default value.
+>>> my_func()
+None
+>>> # Let's load some configuration. Now when foo is not passed, the param
+>>> # takes the value from the configuration.
+>>> config.read_dict({"general": {"foo": "foo"}})
+>>> my_func()
+'foo'
 ```
