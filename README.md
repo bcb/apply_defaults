@@ -1,9 +1,20 @@
 # apply_defaults
 
-Applies a set of values to a function's optional params, if nothing was passed
-to them. The values can come from the bound object, or a configuration file.
+Applies a set of values to a function's optional parameters, if nothing was
+passed to them.
 
-`apply_self` applies attributes from the bound object:
+In a typical function, the passed value takes precedence, and if no value is
+passed it takes the default value specified in the parameter list is used.
+
+This adds another layer between those two. So the precedence becomes:
+
+1. Passed values, otherwise
+2. The values specified by the decorator, otherwise
+3. The default value.
+
+The values can come from the bound object, or a configuration file.
+
+`apply_self` applies attributes from the bound object ("self"):
 
 ```python
 from apply_defaults import apply_self

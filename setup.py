@@ -6,7 +6,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     author="Beau Barker",
-    description="Apply default values to keyword params",
+    description="Apply values to optional params",
     long_description=readme,
     long_description_content_type="text/markdown",
     name="apply_defaults",
