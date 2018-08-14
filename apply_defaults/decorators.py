@@ -1,27 +1,33 @@
 from inspect import signature
 from functools import wraps
-from typing import Any, Callable
+from typing import Any, Callable, Dict, Optional
+from configparser import ConfigParser
 
 
 def apply_self(function: Callable) -> Callable:
     @wraps(function)
     def wrapper(self, *args: Any, **kwargs: Any) -> Any:
-        for arg in signature(function).parameters:
-            if hasattr(self, arg) and arg not in kwargs:
-                kwargs[arg] = getattr(self, arg)
+        for name in signature(function).parameters:
+            if name in self.__dict__ and name not in kwargs:
+                kwargs[name] = getattr(self, name)
         return function(self, *args, **kwargs)
 
     return wrapper
 
 
-def apply_config(config, section="general") -> Callable:
+def apply_config(
+    config: ConfigParser, section: str = "general", converters: Optional[Dict] = None
+) -> Callable:
     def real_decorator(function: Callable) -> Callable:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             for name, param in signature(function).parameters.items():
                 if config.has_option(section, name) and name not in kwargs:
+                    # If name is specified in converters dict
+                    if converters is not None and name in converters.keys():
+                        kwargs[name] = getattr(config, converters[name])(section, name)
                     # Try to infer the type from the parameter's annotation
-                    if param.annotation is int:
+                    elif param.annotation is int:
                         kwargs[name] = config.getint(section, name)
                     elif param.annotation is float:
                         kwargs[name] = config.getfloat(section, name)
