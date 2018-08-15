@@ -29,11 +29,18 @@ class MyObject:
     @apply_self
     def method(self, foo=None):
         return foo
+```
 
->>> # A value is passed - take this value.
+When a value is passed; take this value.
+
+```python
 >>> MyObject().method(foo="bar")
 'bar'
->>> # A value is not passed, so self.foo is used.
+```
+
+However when a value is _not_ passed, `self.foo` is used.
+
+```python
 >>> MyObject().method()
 'foo'
 ```
