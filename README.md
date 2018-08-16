@@ -1,49 +1,8 @@
 # apply_defaults
 
-Applies a set of values to a function's optional parameters, if nothing was
-passed to them.
+Applies a set of default values to optional parameters.
 
-In Python, a function receives:
-1. the passed value, if specified, otherwise
-2. the default value in the parameter list.
-
-These decorators add another layer in between, so it receives:
-
-1. the passed value, if specified, otherwise
-2. *the value from another set*, if specified, otherwise
-3. the default value in the parameter list.
-
-The values can come from the bound object or a configuration object.
-
-## apply_self
-
-This decorator applies values from the bound object:
-
-```python
-from apply_defaults import apply_self
-
-class MyObject:
-    def __init__(self):
-        self.foo = "foo"
-
-    @apply_self
-    def method(self, foo=None):
-        return foo
-```
-
-When a value is passed; take this value.
-
-```python
->>> MyObject().method(foo="bar")
-'bar'
-```
-
-However when a value is _not_ passed, `self.foo` is used.
-
-```python
->>> MyObject().method()
-'foo'
-```
+This is useful for configuring your functions/application cleanly.
 
 ## apply_config
 
@@ -54,31 +13,59 @@ from apply_defaults import apply_config
 from configparser import ConfigParser
 
 config = ConfigParser()
+config.read_dict({"general": {"foo": "bar"}})
 
 @apply_config(config)
 def my_func(foo=None)
     return foo
 ```
 
-When a value is passed, take this value.
+When foo is passed, take that value.
 
 ```python
->>> my_func(foo="bar")
+>>> my_func(foo="foo")
+'foo'
+```
+
+When foo is not passed, the parameter takes the value from the configuration.
+
+```python
+>>> my_func()
 'bar'
 ```
 
-There is no configuration yet, so my_func takes the parameter's default value.
+If foo is not in the configuration, it takes the default value from the
+parameter list.
+
+## apply_self
+
+This decorator applies values from the bound object:
 
 ```python
->>> my_func()
-None
+from apply_defaults import apply_self
+
+class MyObject:
+    def __init__(self):
+        self.foo = "bar"
+
+    @apply_self
+    def method(self, foo=None):
+        return foo
 ```
 
-With some configuration loaded, the param takes the value from the
-configuration.
+When foo is passed, take that value.
 
 ```python
->>> config.read_dict({"general": {"foo": "foo"}})
->>> my_func()
+>>> MyObject().method(foo="foo")
 'foo'
 ```
+
+When foo is *not* passed, `self.foo` is used.
+
+```python
+>>> MyObject().method()
+'bar'
+```
+
+If foo is not in the bound object's attributes, it takes the default value from
+the parameter list.
