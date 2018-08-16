@@ -4,6 +4,10 @@ Applies a set of default values to optional parameters.
 
 This is useful for configuring your functions/application cleanly.
 
+```sh
+pip install apply_defaults
+```
+
 ## apply_config
 
 This decorator applies the options from a ConfigParser object:
