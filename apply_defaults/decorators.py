@@ -6,7 +6,7 @@ from typing import Any, Callable, Dict, Optional
 
 def apply_self(function: Callable) -> Callable:
     @wraps(function)
-    def wrapper(self, *args: Any, **kwargs: Any) -> Any:
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
         for name in signature(function).parameters:
             if name in self.__dict__ and name not in kwargs:
                 kwargs[name] = getattr(self, name)
