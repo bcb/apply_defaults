@@ -1,12 +1,12 @@
 # apply_defaults
 
-Applies default values to functions.
+Apply default values to functions.
 
-It makes configuration clean and easy:
+Makes configuration easy! Application settings come from a config file into
+your code cleanly and with minimal effort.
 
-- Place configuration in one location and apply it simply.
-- Share default values between multiple functions.
-- No more `val = arg if arg else if config.val then...`
+No more `val = val if val is not None else config.val if 'val' in config else
+val` ugliness.
 
 ```sh
 pip install apply_defaults
@@ -14,66 +14,86 @@ pip install apply_defaults
 
 ## apply_config
 
-This decorator applies the options from a ConfigParser object:
+This decorator applies options from a ConfigParser object.
 
 ```python
 from apply_defaults import apply_config
 from configparser import ConfigParser
 
 config = ConfigParser()
-config.read_dict({"general": {"foo": "bar"}})
+config.read_dict({"general": {"option": True}})  # alteratively read a file
 
 @apply_config(config)
-def my_func(foo=None)
-    return foo
+def func(option: bool = False) -> bool:
+    return option
 ```
 
-When foo is passed, take that value.
+The `option` parameter takes the value from the configuration.
 
 ```python
->>> my_func(foo="foo")
-'foo'
+>>> func()
+True
 ```
 
-When foo is not passed, the parameter takes the value from the configuration.
+Override the configuration by passing a value.
 
 ```python
->>> my_func()
-'bar'
+>>> func(option=False)
+'False'
 ```
 
-If foo is not in the configuration, the default value from the parameter list
-is used.
+If the option is not in the configuration, the default value from the parameter
+list is used.
+
+```python
+>>> config.remove_option("general", "option")
+>>> func()
+False
+```
+
+_Note: ConfigParser's options are strings. Type hints in the function signature
+allow the apply_config decorator to cast options to the desired type.
+Alternatively cast the value yourself._
 
 ## apply_self
 
-This decorator applies values from the bound object:
+This decorator applies attributes from the bound object.
 
 ```python
 from apply_defaults import apply_self
 
 class MyObject:
     def __init__(self):
-        self.foo = "bar"
+        self.option = True
 
     @apply_self
-    def method(self, foo=None):
-        return foo
+    def func(self, option=False):
+        return value
 ```
 
-When foo is passed, take that value.
+_Type hints allow the decorator to cast the config option to the desired type.
+Otherwise, the config option will be a string every time._
+
+The parameter takes the value from the bound object, i.e. `self.foo`.
 
 ```python
->>> MyObject().method(foo="foo")
-'foo'
+>>> obj = MyObject()
+>>> obj.func()
+True
 ```
 
-When foo is *not* passed, `self.foo` is used.
+Override by passing a value.
 
 ```python
->>> MyObject().method()
-'bar'
+>>> obj.func(option=False)
+False
 ```
 
-If foo is not in the bound object's attributes, the default value from the
+If the attribute is not in the bound object, the default value from the
 parameter list is used.
+
+```python
+>>> del obj.option
+>>> obj.func()
+False
+```
