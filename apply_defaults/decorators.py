@@ -1,7 +1,7 @@
-from inspect import signature
-from functools import wraps
-from typing import Any, Callable, Dict, Optional
 from configparser import ConfigParser
+from functools import wraps
+from inspect import signature
+from typing import Any, Callable, Dict, Optional
 
 
 def apply_self(function: Callable) -> Callable:

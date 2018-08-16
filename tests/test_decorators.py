@@ -1,8 +1,7 @@
-from unittest.mock import sentinel
 from configparser import ConfigParser
+from unittest.mock import sentinel
 
-from apply_defaults.decorators import apply_self, apply_config
-
+from apply_defaults.decorators import apply_config, apply_self
 
 config = ConfigParser()
 
