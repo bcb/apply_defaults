@@ -1,8 +1,12 @@
 # apply_defaults
 
-Applies a set of default values to optional parameters.
+Applies default values to functions.
 
-This is useful for configuring your functions/application cleanly.
+It makes configuration clean and easy:
+
+- Place configuration in one location and apply it simply.
+- Share default values between multiple functions.
+- No more `val = arg if arg else if config.val then...`
 
 ```sh
 pip install apply_defaults
@@ -38,8 +42,8 @@ When foo is not passed, the parameter takes the value from the configuration.
 'bar'
 ```
 
-If foo is not in the configuration, it takes the default value from the
-parameter list.
+If foo is not in the configuration, the default value from the parameter list
+is used.
 
 ## apply_self
 
@@ -71,5 +75,5 @@ When foo is *not* passed, `self.foo` is used.
 'bar'
 ```
 
-If foo is not in the bound object's attributes, it takes the default value from
-the parameter list.
+If foo is not in the bound object's attributes, the default value from the
+parameter list is used.
