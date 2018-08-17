@@ -51,9 +51,9 @@ list is used.
 False
 ```
 
-_Note: ConfigParser's options are strings. Type hints in the function signature
-allow the apply_config decorator to cast options to the desired type.
-Alternatively cast the value yourself._
+_ConfigParser's options are strings. Type hints in the function signature allow
+the apply_config decorator to cast options to the desired type.  Alternatively
+cast the value yourself._
 
 ## apply_self
 
@@ -70,9 +70,6 @@ class MyObject:
     def func(self, option=False):
         return value
 ```
-
-_Type hints allow the decorator to cast the config option to the desired type.
-Otherwise, the config option will be a string every time._
 
 The parameter takes the value from the bound object, i.e. `self.foo`.
 
