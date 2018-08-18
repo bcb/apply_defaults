@@ -3,16 +3,13 @@
 Apply default values to functions.
 
 Makes configuration easy! Application settings come from a config file into
-your code cleanly and with minimal effort.
-
-No more `val = val if val is not None else config.val if 'val' in config else
-val` ugliness.
+your code cleanly.
 
 ```sh
 pip install apply_defaults
 ```
 
-## apply_config
+## @apply_config
 
 This decorator applies options from a ConfigParser object.
 
@@ -21,7 +18,7 @@ from apply_defaults import apply_config
 from configparser import ConfigParser
 
 config = ConfigParser()
-config.read_dict({"general": {"option": True}})  # alteratively read a file
+config.read_dict({"general": {"option": True}})
 
 @apply_config(config)
 def func(option: bool = False) -> bool:
@@ -55,7 +52,7 @@ _ConfigParser's options are strings. Type hints in the function signature allow
 the apply_config decorator to cast options to the desired type.  Alternatively
 cast the value yourself._
 
-## apply_self
+## @apply_self
 
 This decorator applies attributes from the bound object.
 
