@@ -12,5 +12,5 @@ setup(
     name="apply_defaults",
     packages=["apply_defaults"],
     url="https://github.com/bcb/apply_defaults",
-    version="0.1.2",
+    version="0.1.3",
 )
