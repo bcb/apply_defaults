@@ -1,5 +1,9 @@
 # apply_defaults Change Log
 
+## 0.1.4 (4 Oct, 2019)
+
+- Remove env.py.
+
 ## 0.1.3 (10 Sep, 2019)
 
 - Add MANIFEST.in, which packages the license.
