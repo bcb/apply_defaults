@@ -6,6 +6,11 @@ with open("README.md", "r") as readme_file:
 
 setup(
     author="Beau Barker",
+    classifiers=[
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
     description="Apply values to optional params",
     long_description=readme,
     long_description_content_type="text/markdown",
