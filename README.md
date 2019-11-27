@@ -65,10 +65,10 @@ class MyObject:
 
     @apply_self
     def func(self, option=False):
-        return value
+        return option
 ```
 
-The parameter takes the value from the bound object, i.e. `self.foo`.
+The parameter takes the value from the bound object, i.e. `self.option`.
 
 ```python
 >>> obj = MyObject()
