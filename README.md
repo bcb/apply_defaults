@@ -36,7 +36,7 @@ Override the configuration by passing a value.
 
 ```python
 >>> func(option=False)
-'False'
+False
 ```
 
 If the option is not in the configuration, the default value from the parameter
