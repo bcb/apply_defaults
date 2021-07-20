@@ -1,5 +1,11 @@
 # apply_defaults Change Log
 
+## 0.1.5 (20 Jul, 2021)
+
+- Use mypy with the --strict flag.
+- Added Github Actions to the repo.
+- Add .pre-commit-config.yml
+
 ## 0.1.4 (4 Oct, 2019)
 
 - Remove env.py.
