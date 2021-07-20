@@ -1,5 +1,9 @@
 # apply_defaults Change Log
 
+## 0.1.6 (20 Jul, 2021)
+
+- Alias imports in `__init__.py`, so that mypy considers them re-exported.
+
 ## 0.1.5 (20 Jul, 2021)
 
 - Use mypy with the --strict flag.
