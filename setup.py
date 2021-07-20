@@ -13,5 +13,5 @@ setup(
     packages=["apply_defaults"],
     package_data={"apply_defaults": ["py.typed"]},
     url="https://github.com/bcb/apply_defaults",
-    version="0.1.5",
+    version="0.1.6",
 )
