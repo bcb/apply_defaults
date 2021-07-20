@@ -4,7 +4,7 @@ from inspect import signature
 from typing import Any, Callable, Dict, Optional
 
 
-def apply_self(function: Callable) -> Callable:
+def apply_self(function: Callable[..., Any]) -> Callable[..., Any]:
     @wraps(function)
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
         for name in signature(function).parameters:
@@ -16,9 +16,11 @@ def apply_self(function: Callable) -> Callable:
 
 
 def apply_config(
-    config: ConfigParser, section: str = "general", converters: Optional[Dict] = None
-) -> Callable:
-    def real_decorator(function: Callable) -> Callable:
+    config: ConfigParser,
+    section: str = "general",
+    converters: Optional[Dict[str, Any]] = None,
+) -> Callable[..., Any]:
+    def real_decorator(function: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(function)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             for name, param in signature(function).parameters.items():
